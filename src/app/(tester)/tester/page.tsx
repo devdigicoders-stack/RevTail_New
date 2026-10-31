@@ -894,10 +894,10 @@ export default async function TesterDashboardPage({
                 </div>
                 <Link
                   href="/tester/campaigns/ongoing"
-                  className="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1 text-nowrap fw-semibold flex-shrink-0 text-decoration-none"
-                  style={{ fontSize: "11.5px" }}
+                  className="tester-view-all-btn"
                 >
-                  View All &rarr;
+                  <span>View All</span>
+                  <i className="bi bi-arrow-right"></i>
                 </Link>
               </div>
 
@@ -1117,10 +1117,10 @@ export default async function TesterDashboardPage({
                 </div>
                 <Link
                   href="/tester/campaigns/live"
-                  className="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1 text-nowrap fw-semibold flex-shrink-0 text-decoration-none"
-                  style={{ fontSize: "11.5px" }}
+                  className="tester-view-all-btn"
                 >
-                  View All &rarr;
+                  <span>View All</span>
+                  <i className="bi bi-arrow-right"></i>
                 </Link>
               </div>
 
@@ -1461,15 +1461,16 @@ export default async function TesterDashboardPage({
                 <p className="text-muted small mb-2.5" style={{ fontSize: "11.5px" }}>
                   Join our official WhatsApp group for daily campaign updates &amp; instant support.
                 </p>
-                <Link
+                <a
                   href="https://chat.whatsapp.com/JLDLEwZWJTPJKhPl5XzWQD"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-sm btn-success rounded-pill px-3 py-1 fw-semibold text-decoration-none"
-                  style={{ fontSize: "12px" }}
+                  className="tester-community-cta-btn"
                 >
-                  Join Community &rarr;
-                </Link>
+                  <i className="bi bi-whatsapp"></i>
+                  <span>Join Community</span>
+                  <i className="bi bi-arrow-right-short fs-5"></i>
+                </a>
               </div>
             </div>
 

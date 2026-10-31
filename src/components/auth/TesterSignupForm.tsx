@@ -40,6 +40,8 @@ export default function TesterSignupForm() {
     useState<AgeCategory>("");
   const [pinCode, setPinCode] =
     useState("");
+  const [whatsappConsent, setWhatsappConsent] =
+    useState(true);
 
   const [showPassword, setShowPassword] =
     useState(false);
@@ -490,6 +492,14 @@ export default function TesterSignupForm() {
     ) {
       setErrorMessage(
         "Please enter a valid 6-digit PIN code."
+      );
+
+      return false;
+    }
+
+    if (!whatsappConsent) {
+      setErrorMessage(
+        "Please agree to receive campaign messages and updates on WhatsApp."
       );
 
       return false;
@@ -1111,6 +1121,143 @@ export default function TesterSignupForm() {
       </div>
 
       {/* ===================================== */}
+      {/* WHATSAPP CAMPAIGN CONSENT PERMISSION */}
+      {/* ===================================== */}
+      <div className="col-12 my-2">
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => {
+            if (!isLoading) {
+              setWhatsappConsent(!whatsappConsent);
+            }
+          }}
+          onKeyDown={(e) => {
+            if ((e.key === " " || e.key === "Enter") && !isLoading) {
+              e.preventDefault();
+              setWhatsappConsent(!whatsappConsent);
+            }
+          }}
+          className="user-select-none"
+          style={{
+            backgroundColor: whatsappConsent ? "#f0fdf4" : "#ffffff",
+            border: whatsappConsent ? "1.5px solid #22c55e" : "1.5px solid #cbd5e1",
+            borderRadius: "12px",
+            padding: "14px 16px",
+            cursor: isLoading ? "not-allowed" : "pointer",
+            transition: "all 0.2s ease",
+            boxShadow: whatsappConsent
+              ? "0 2px 8px rgba(34, 197, 94, 0.12)"
+              : "0 1px 3px rgba(15, 23, 42, 0.04)",
+          }}
+        >
+          <div className="d-flex align-items-start gap-3">
+            {/* Custom Bulletproof Checkbox (Immune to global CSS input overrides) */}
+            <div
+              style={{
+                width: "22px",
+                height: "22px",
+                minWidth: "22px",
+                maxWidth: "22px",
+                borderRadius: "6px",
+                backgroundColor: whatsappConsent ? "#16a34a" : "#ffffff",
+                border: whatsappConsent ? "2px solid #16a34a" : "2px solid #94a3b8",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: "2px",
+                transition: "all 0.18s ease",
+                boxShadow: whatsappConsent ? "0 2px 4px rgba(22, 163, 74, 0.25)" : "none",
+                flexShrink: 0,
+              }}
+            >
+              {whatsappConsent && (
+                <svg
+                  width="13"
+                  height="10"
+                  viewBox="0 0 13 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ display: "block" }}
+                >
+                  <path
+                    d="M1.5 5L4.5 8L11.5 1.5"
+                    stroke="#ffffff"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+            </div>
+
+            {/* Hidden Input for Form Accessibility */}
+            <input
+              type="checkbox"
+              id="whatsappConsent"
+              name="whatsappConsent"
+              checked={whatsappConsent}
+              onChange={(e) => setWhatsappConsent(e.target.checked)}
+              disabled={isLoading}
+              style={{
+                position: "absolute",
+                opacity: 0,
+                pointerEvents: "none",
+                width: 0,
+                height: 0,
+                margin: 0,
+                padding: 0,
+              }}
+            />
+
+            {/* Label & Description */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div
+                className="d-flex align-items-center gap-1.5 mb-1"
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  color: "#0f172a",
+                }}
+              >
+                <i
+                  className="bi bi-whatsapp"
+                  style={{ color: "#25D366", fontSize: "16px" }}
+                ></i>
+                <span>WhatsApp Updates Permission</span>
+              </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#475569",
+                  lineHeight: "1.5",
+                  fontWeight: 500,
+                }}
+              >
+                I agree to receive new campaign invitations, task instructions, and reward updates on my WhatsApp number.
+              </div>
+            </div>
+          </div>
+
+          {/* Required warning alert if unchecked */}
+          {!whatsappConsent && (
+            <div
+              className="mt-2.5 pt-2 border-top d-flex align-items-center gap-1.5"
+              style={{
+                borderColor: "#fee2e2",
+                color: "#dc2626",
+                fontSize: "11.5px",
+                fontWeight: 600,
+              }}
+            >
+              <i className="bi bi-exclamation-circle-fill"></i>
+              <span>Permission is required to receive campaign alerts and instructions on WhatsApp.</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ===================================== */}
       {/* SUBMIT */}
       {/* ===================================== */}
       <div className="col-12">
@@ -1118,7 +1265,7 @@ export default function TesterSignupForm() {
           type="submit"
           className="btn-login w-100"
           disabled={
-            isLoading || !mobileVerified || !captchaToken
+            isLoading || !mobileVerified || !captchaToken || !whatsappConsent
           }
         >
           {isLoading ? (

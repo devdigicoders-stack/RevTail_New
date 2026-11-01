@@ -81,10 +81,11 @@
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 6px;
   margin-bottom: 12px;
   border: 1px solid #e2e8f0;
+  white-space: nowrap;
 }
 
 /* Form Groups & Inputs */
@@ -190,6 +191,7 @@ select.login-input {
   box-shadow: 0 2px 8px rgba(1, 41, 119, 0.25);
   transition: all 0.2s ease;
   margin-top: 8px;
+  white-space: nowrap;
 }
 
 .btn-login:hover {
@@ -292,7 +294,7 @@ select.login-input {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 11px 16px;
+  padding: 11px 14px;
   background: #f8fafc;
   color: #1e293b;
   border: 1px solid #e2e8f0;
@@ -302,6 +304,11 @@ select.login-input {
   text-decoration: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.btn-auth-switch span {
+  white-space: nowrap;
 }
 
 .btn-auth-switch:hover {

@@ -66,6 +66,7 @@ export default function PublicLayout({
                       padding: "2px 8px",
                       borderRadius: "4px",
                       textTransform: "uppercase",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     BRAND PARTNERSHIP
@@ -89,7 +90,7 @@ export default function PublicLayout({
                 <div className="d-flex align-items-center gap-3" style={{ fontSize: "12px", color: "#94a3b8" }}>
                   <a
                     href="tel:+918341675736"
-                    style={{ color: "#cbd5e1", textDecoration: "none" }}
+                    style={{ color: "#cbd5e1", textDecoration: "none", whiteSpace: "nowrap" }}
                   >
                     <i className="feather icon-feather-phone me-1" />
                     +91-8341675736
@@ -97,7 +98,7 @@ export default function PublicLayout({
                   <span style={{ opacity: 0.3 }}>|</span>
                   <a
                     href="mailto:support@revtail.in"
-                    style={{ color: "#cbd5e1", textDecoration: "none" }}
+                    style={{ color: "#cbd5e1", textDecoration: "none", whiteSpace: "nowrap" }}
                   >
                     <i className="feather icon-feather-mail me-1" />
                     support@revtail.in
@@ -237,7 +238,7 @@ export default function PublicLayout({
               </div>
 
               {/* Desktop Action CTAs (Right) */}
-              <div className="d-none d-lg-flex align-items-center gap-2">
+              <div className="d-none d-lg-flex align-items-center gap-2" style={{ flexShrink: 0 }}>
                 <a
                   href="/login"
                   style={{
@@ -247,6 +248,7 @@ export default function PublicLayout({
                     padding: "7px 14px",
                     borderRadius: "8px",
                     textDecoration: "none",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   <i className="bi bi-box-arrow-in-right me-1"></i> Log in
@@ -264,6 +266,7 @@ export default function PublicLayout({
                     borderRadius: "8px",
                     textDecoration: "none",
                     transition: "all 0.2s ease",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   For Brands
@@ -281,6 +284,7 @@ export default function PublicLayout({
                     textDecoration: "none",
                     boxShadow: "0 2px 6px rgba(1, 41, 119, 0.25)",
                     transition: "all 0.2s ease",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   Join as Tester

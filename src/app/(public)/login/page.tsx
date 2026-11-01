@@ -28,19 +28,19 @@ export default function LoginPage() {
               Don&apos;t have an account yet?
             </p>
             <div className="auth-switch-grid">
-              <Link href="/tester/signup" className="btn-auth-switch">
-                <span className="d-flex align-items-center">
+              <Link href="/tester/signup" className="btn-auth-switch text-nowrap">
+                <span className="d-flex align-items-center text-nowrap">
                   <i className="bi bi-person-check me-2 fs-15 text-primary"></i>
                   <span>Join as Tester</span>
                 </span>
-                <i className="bi bi-arrow-right text-muted"></i>
+                <i className="bi bi-arrow-right text-muted ms-2"></i>
               </Link>
-              <Link href="/brand/signup" className="btn-auth-switch">
-                <span className="d-flex align-items-center">
+              <Link href="/brand/signup" className="btn-auth-switch text-nowrap">
+                <span className="d-flex align-items-center text-nowrap">
                   <i className="bi bi-briefcase me-2 fs-15 text-success"></i>
                   <span>Register Brand</span>
                 </span>
-                <i className="bi bi-arrow-right text-muted"></i>
+                <i className="bi bi-arrow-right text-muted ms-2"></i>
               </Link>
             </div>
           </div>

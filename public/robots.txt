@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /brand/
+Disallow: /tester/
+Disallow: /api/
+
+Sitemap: https://revtail.in/sitemap.xml
+

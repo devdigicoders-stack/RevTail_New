@@ -15,6 +15,8 @@ type SendWhatsAppTemplateInput = {
   callbackData?: string;
 
   buttonUrlParameter?: string;
+
+  isOtp?: boolean;
 };
 
 type WhatsAppApiResponse = {
@@ -79,24 +81,39 @@ export async function sendWhatsAppTemplate({
   callbackData,
 
   buttonUrlParameter,
+
+  isOtp,
 }: SendWhatsAppTemplateInput) {
+  const isOtpTemplate =
+    Boolean(
+      isOtp ||
+      (process.env.WHATSAPP_OTP_TEMPLATE_NAME && templateName === process.env.WHATSAPP_OTP_TEMPLATE_NAME) ||
+      templateName.toLowerCase().includes("otp")
+    );
+
   const apiUrl =
-    process.env
-      .WHATSAPP_API_URL;
+    isOtpTemplate && process.env.WHATSAPP_OTP_API_URL
+      ? process.env.WHATSAPP_OTP_API_URL
+      : process.env.WHATSAPP_API_URL;
 
   const apiToken =
-    process.env
-      .WHATSAPP_API_TOKEN;
+    isOtpTemplate && process.env.WHATSAPP_OTP_API_TOKEN
+      ? process.env.WHATSAPP_OTP_API_TOKEN
+      : process.env.WHATSAPP_API_TOKEN;
 
   if (!apiUrl) {
     throw new Error(
-      "WHATSAPP_API_URL is not configured."
+      isOtpTemplate
+        ? "WHATSAPP_OTP_API_URL is not configured."
+        : "WHATSAPP_API_URL is not configured."
     );
   }
 
   if (!apiToken) {
     throw new Error(
-      "WHATSAPP_API_TOKEN is not configured."
+      isOtpTemplate
+        ? "WHATSAPP_OTP_API_TOKEN is not configured."
+        : "WHATSAPP_API_TOKEN is not configured."
     );
   }
 

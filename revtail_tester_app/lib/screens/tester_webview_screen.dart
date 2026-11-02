@@ -312,7 +312,7 @@ class _TesterWebViewScreenState extends State<TesterWebViewScreen> {
         backgroundColor: Colors.white,
         body: SafeArea(
           top: true,
-          bottom: true,
+          bottom: false,
           child: Column(
             children: [
               // Top linear loading indicator

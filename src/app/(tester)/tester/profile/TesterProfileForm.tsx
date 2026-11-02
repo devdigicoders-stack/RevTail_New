@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import LogoutButton from "@/components/auth/LogoutButton";
 import { ProfileSkeleton } from "@/components/tester/TesterSkeletonLoader";
 import {
   ChangeEvent,
@@ -974,6 +975,11 @@ export default function TesterProfileForm({
                 <i className="bi bi-patch-check-fill me-1"></i>
                 {profile?.approvalStatus ?? "Approved"}
               </span>
+
+              <LogoutButton className="btn btn-outline-danger btn-sm d-inline-flex align-items-center gap-1 px-3 py-2 fw-semibold rounded-pill text-danger text-decoration-none">
+                <i className="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+              </LogoutButton>
             </div>
           </div>
         </div>
@@ -1693,6 +1699,28 @@ export default function TesterProfileForm({
 
           </form>
 
+          {/* ==================================================
+              ACCOUNT LOGOUT
+          ================================================== */}
+          <div className="card border-0 shadow-sm tester-profile-card mt-3 mb-4">
+            <div className="card-body d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+              <div>
+                <h6 className="fw-bold mb-1 text-danger d-flex align-items-center gap-2">
+                  <i className="bi bi-box-arrow-right"></i>
+                  <span>Sign Out</span>
+                </h6>
+                <p className="text-muted small mb-0">
+                  Log out of your Revtail Tester profile on this device.
+                </p>
+              </div>
+
+              <LogoutButton className="btn btn-outline-danger px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2 rounded-3 text-danger text-decoration-none">
+                <i className="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+              </LogoutButton>
+            </div>
+          </div>
+
         </div>
 
         {/* ====================================================
@@ -1773,6 +1801,13 @@ export default function TesterProfileForm({
                   </span>
                 </div>
 
+              </div>
+
+              <div className="mt-3 pt-3 border-top">
+                <LogoutButton className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 py-2 fw-semibold rounded-3 text-danger text-decoration-none">
+                  <i className="bi bi-box-arrow-right"></i>
+                  <span>Logout</span>
+                </LogoutButton>
               </div>
 
             </div>

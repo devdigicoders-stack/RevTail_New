@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController.forward();
 
     // Navigate to WebView screen after brief splash
-    Future.delayed(const Duration(milliseconds: 1600), () {
+    Future.delayed(const Duration(milliseconds: 1800), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
@@ -84,44 +84,27 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // App Logo Badge
+                // Official App Logo Badge
                 Container(
-                  width: 88,
-                  height: 88,
+                  width: 110,
+                  height: 110,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(28),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.15),
-                        blurRadius: 20,
+                        color: Colors.black.withValues(alpha: 0.25),
+                        blurRadius: 25,
                         offset: const Offset(0, 10),
                       ),
                     ],
                   ),
-                  child: Center(
-                    child: RichText(
-                      text: const TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'R',
-                            style: TextStyle(
-                              color: AppConfig.primaryColor,
-                              fontSize: 44,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -1,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '★',
-                            style: TextStyle(
-                              color: AppConfig.amberColor,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(28),
+                    child: Image.asset(
+                      'assets/icon/app_icon.png',
+                      width: 110,
+                      height: 110,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -134,7 +117,7 @@ class _SplashScreenState extends State<SplashScreen>
                       'Rev',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 32,
+                        fontSize: 34,
                         fontWeight: FontWeight.w800,
                         letterSpacing: -0.5,
                       ),
@@ -143,7 +126,7 @@ class _SplashScreenState extends State<SplashScreen>
                       'tail',
                       style: TextStyle(
                         color: AppConfig.accentColor,
-                        fontSize: 32,
+                        fontSize: 34,
                         fontWeight: FontWeight.w800,
                         letterSpacing: -0.5,
                       ),
@@ -154,7 +137,7 @@ class _SplashScreenState extends State<SplashScreen>
                 // Subtitle
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
@@ -165,7 +148,7 @@ class _SplashScreenState extends State<SplashScreen>
                       color: Colors.white70,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
-                      letterSpacing: 2,
+                      letterSpacing: 2.5,
                     ),
                   ),
                 ),

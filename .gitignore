@@ -41,3 +41,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# mobile apk & flutter
+*.apk
+revtail_tester_app/build/
+
+

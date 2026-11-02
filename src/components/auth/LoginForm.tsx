@@ -1,20 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import {
-  Turnstile,
-  type TurnstileInstance,
-} from "@marsidev/react-turnstile";
-
 export default function LoginForm() {
   const router = useRouter();
-
-  const turnstileRef =
-    useRef<TurnstileInstance | null>(null);
 
   const [
     showPassword,
@@ -35,11 +27,6 @@ export default function LoginForm() {
   const [
     password,
     setPassword,
-  ] = useState("");
-
-  const [
-    captchaToken,
-    setCaptchaToken,
   ] = useState("");
 
   const [
@@ -146,17 +133,6 @@ export default function LoginForm() {
       return;
     }
 
-    /*
-     * CAPTCHA validation
-     */
-    if (!captchaToken) {
-      setErrorMessage(
-        "Please complete the CAPTCHA verification."
-      );
-
-      return;
-    }
-
     try {
       setIsLoading(true);
 
@@ -179,8 +155,6 @@ export default function LoginForm() {
                 identifier.trim(),
 
               password,
-
-              captchaToken,
             }),
           }
         );
@@ -219,9 +193,6 @@ export default function LoginForm() {
           "Unable to login. Server returned an invalid response."
         );
 
-        turnstileRef.current?.reset();
-        setCaptchaToken("");
-
         return;
       }
 
@@ -236,14 +207,6 @@ export default function LoginForm() {
           result.message ||
             "Login failed."
         );
-
-        /*
-         * Turnstile token is single-use,
-         * so reset after failed login.
-         */
-        turnstileRef.current?.reset();
-
-        setCaptchaToken("");
 
         return;
       }
@@ -309,13 +272,6 @@ export default function LoginForm() {
       setErrorMessage(
         "Unable to connect to the server. Please try again."
       );
-
-      /*
-       * Reset CAPTCHA after request failure.
-       */
-      turnstileRef.current?.reset();
-
-      setCaptchaToken("");
     } finally {
       setIsLoading(false);
     }
@@ -459,76 +415,13 @@ export default function LoginForm() {
       </div>
 
       {/* ========================================= */}
-      {/* CLOUDFLARE TURNSTILE */}
-      {/* ========================================= */}
-
-      <div className="captcha-wrapper">
-        <Turnstile
-          ref={
-            turnstileRef
-          }
-
-          siteKey={
-            process.env
-              .NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
-            ""
-          }
-
-          onSuccess={(
-            token
-          ) => {
-            setCaptchaToken(
-              token
-            );
-          }}
-
-          onExpire={() => {
-            setCaptchaToken(
-              ""
-            );
-          }}
-
-          onError={(
-            errorCode
-          ) => {
-            console.error(
-              "Turnstile error:",
-              errorCode
-            );
-
-            setCaptchaToken(
-              ""
-            );
-
-            setErrorMessage(
-              "CAPTCHA verification failed. Please try again."
-            );
-          }}
-
-          options={{
-            theme:
-              "auto",
-
-            size:
-              "normal",
-
-            action:
-              "login",
-          }}
-        />
-      </div>
-
-      {/* ========================================= */}
       {/* LOGIN BUTTON */}
       {/* ========================================= */}
 
       <button
         type="submit"
         className="btn-login"
-        disabled={
-          isLoading ||
-          !captchaToken
-        }
+        disabled={isLoading}
       >
         {isLoading ? (
           <>

@@ -4,9 +4,6 @@ import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { createToken } from "@/lib/auth";
 
-const TURNSTILE_VERIFY_URL =
-  "https://challenges.cloudflare.com/turnstile/v0/siteverify";
-
 /*
  * ------------------------------------------------
  * LOGIN RATE LIMIT
@@ -40,14 +37,6 @@ type LoginAttempt = {
  */
 const loginAttempts =
   new Map<string, LoginAttempt>();
-
-interface TurnstileResponse {
-  success: boolean;
-  "error-codes"?: string[];
-  challenge_ts?: string;
-  hostname?: string;
-  action?: string;
-}
 
 /*
  * ------------------------------------------------
@@ -300,12 +289,6 @@ export async function POST(
         ? body.password
         : "";
 
-    const captchaToken =
-      typeof body.captchaToken ===
-      "string"
-        ? body.captchaToken
-        : "";
-
     const identifier =
       typeof rawIdentifier ===
       "string"
@@ -361,166 +344,7 @@ export async function POST(
 
     /*
      * ------------------------------------------------
-     * 3. VALIDATE CAPTCHA TOKEN
-     * ------------------------------------------------
-     */
-
-    if (!captchaToken) {
-      return NextResponse.json(
-        {
-          success: false,
-
-          message:
-            "CAPTCHA verification is required.",
-        },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    const turnstileSecretKey =
-      process.env
-        .TURNSTILE_SECRET_KEY;
-
-    if (!turnstileSecretKey) {
-      console.error(
-        "TURNSTILE_SECRET_KEY is not configured."
-      );
-
-      return NextResponse.json(
-        {
-          success: false,
-
-          message:
-            "CAPTCHA service is temporarily unavailable.",
-        },
-        {
-          status: 500,
-        }
-      );
-    }
-
-    /*
-     * ------------------------------------------------
-     * 4. VERIFY CAPTCHA WITH CLOUDFLARE
-     * ------------------------------------------------
-     */
-
-    let turnstileResult:
-      TurnstileResponse;
-
-    try {
-      const turnstileResponse =
-        await fetch(
-          TURNSTILE_VERIFY_URL,
-          {
-            method:
-              "POST",
-
-            headers: {
-              "Content-Type":
-                "application/x-www-form-urlencoded",
-            },
-
-            body:
-              new URLSearchParams({
-                secret:
-                  turnstileSecretKey,
-
-                response:
-                  captchaToken,
-              }),
-
-            cache:
-              "no-store",
-          }
-        );
-
-      if (
-        !turnstileResponse.ok
-      ) {
-        console.error(
-          "Turnstile HTTP error:",
-          turnstileResponse.status
-        );
-
-        return NextResponse.json(
-          {
-            success: false,
-
-            message:
-              "CAPTCHA verification failed. Please try again.",
-          },
-          {
-            status: 400,
-          }
-        );
-      }
-
-      turnstileResult =
-        await turnstileResponse.json();
-
-      console.log(
-        "TURNSTILE RESULT:",
-        turnstileResult
-      );
-    } catch (error) {
-      console.error(
-        "Turnstile request failed:",
-        error
-      );
-
-      if (process.env.NODE_ENV === "development") {
-        console.warn("Dev mode: Bypassing Turnstile verification error due to offline/sandbox environment");
-        turnstileResult = { success: true };
-      } else {
-        return NextResponse.json(
-          {
-            success: false,
-
-            message:
-              "Unable to verify CAPTCHA. Please try again.",
-          },
-          {
-            status: 500,
-          }
-        );
-      }
-    }
-
-    /*
-     * ------------------------------------------------
-     * 5. CHECK CAPTCHA RESULT
-     * ------------------------------------------------
-     */
-
-    if (
-      !turnstileResult.success
-    ) {
-      console.warn(
-        "Turnstile verification failed:",
-        turnstileResult[
-          "error-codes"
-        ]
-      );
-
-      return NextResponse.json(
-        {
-          success: false,
-
-          message:
-            "CAPTCHA verification failed. Please try again.",
-        },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    /*
-     * ------------------------------------------------
-     * 6. DETERMINE LOGIN TYPE
+     * 3. DETERMINE LOGIN TYPE
      * ------------------------------------------------
      *
      * Email:

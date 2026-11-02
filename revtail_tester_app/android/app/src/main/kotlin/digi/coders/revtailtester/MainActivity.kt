@@ -1,4 +1,4 @@
-package `in`.revtail.revtail_tester_app
+package digi.coders.revtailtester
 
 import io.flutter.embedding.android.FlutterActivity
 

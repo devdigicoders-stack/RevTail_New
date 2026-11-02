@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppConfig {
-  static const String appName = 'Revtail Tester';
+  static const String appName = 'Revtail';
   static const String initialUrl = 'https://revtail.in/tester';
   static const String fallbackUrl = 'https://revtail.in/login';
   static const String domain = 'revtail.in';

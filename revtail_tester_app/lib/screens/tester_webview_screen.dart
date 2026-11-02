@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -33,19 +32,6 @@ class _TesterWebViewScreenState extends State<TesterWebViewScreen> {
     super.initState();
     _initConnectivity();
     _initWebView();
-    _requestAppPermissions();
-  }
-
-  /// Request permissions for photo/screenshot uploads in tester tasks
-  Future<void> _requestAppPermissions() async {
-    try {
-      await [
-        Permission.camera,
-        Permission.photos,
-      ].request();
-    } catch (e) {
-      debugPrint('Permission request error: $e');
-    }
   }
 
   /// Monitor connectivity changes

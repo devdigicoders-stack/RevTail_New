@@ -25,7 +25,7 @@ export default function TesterSignupPage() {
       <div className="login-wrapper">
         <div className="container d-flex justify-content-center" style={{ maxWidth: "900px" }}>
           <div className="login-card tester-card-wide">
-            <div className="text-center mb-4 pb-2 border-bottom border-light-subtle">
+            <div className="text-center mb-4">
               <div className="mb-3 text-center">
                 <Link href="/">
                   {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -104,6 +104,7 @@ class _TesterWebViewScreenState extends State<TesterWebViewScreen> {
                 _hasError = false;
               });
             }
+            _injectAuthPageCleanStyle(url);
           },
           onPageFinished: (String url) {
             if (mounted) {
@@ -111,6 +112,7 @@ class _TesterWebViewScreenState extends State<TesterWebViewScreen> {
                 _isLoading = false;
               });
             }
+            _injectAuthPageCleanStyle(url);
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint('WebView Resource Error: ${error.errorCode} - ${error.description}');
@@ -140,6 +142,28 @@ class _TesterWebViewScreenState extends State<TesterWebViewScreen> {
 
     controller.loadRequest(Uri.parse(AppConfig.initialUrl));
     _controller = controller;
+  }
+
+  /// Injects CSS to hide website marketing headers & footers on Login / Signup / Auth pages
+  void _injectAuthPageCleanStyle(String url) {
+    final lowerUrl = url.toLowerCase();
+    if (lowerUrl.contains('/login') ||
+        lowerUrl.contains('/signup') ||
+        lowerUrl.contains('/register') ||
+        lowerUrl.contains('/forgot-password')) {
+      _controller.runJavaScript('''
+        (function() {
+          var id = 'revtail-app-clean-auth-style';
+          var style = document.getElementById(id);
+          if (!style) {
+            style = document.createElement('style');
+            style.id = id;
+            style.innerHTML = 'header, footer, .revtail-sticky-header, nav.navbar, .navbar { display: none !important; } body, main, .login-wrapper { padding-top: 16px !important; margin-top: 0 !important; }';
+            document.head.appendChild(style);
+          }
+        })();
+      ''');
+    }
   }
 
   /// Handle external link clicks (WhatsApp, Tel, Mail, External shopping/brand links)

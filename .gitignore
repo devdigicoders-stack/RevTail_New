@@ -41,8 +41,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# mobile apk & flutter
+# mobile apk, aab, keystore & flutter
 *.apk
+*.aab
+*.jks
+key.properties
+revtail_tester_app/android/key.properties
+revtail_tester_app/android/app/key.jks
 revtail_tester_app/build/
+
 
 

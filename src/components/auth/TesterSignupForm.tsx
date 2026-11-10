@@ -5,10 +5,7 @@ import type { FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import {
-  Turnstile,
-  type TurnstileInstance,
-} from "@marsidev/react-turnstile";
+
 
 type Gender = "" | "MALE" | "FEMALE" | "OTHER";
 
@@ -23,11 +20,7 @@ export default function TesterSignupForm() {
  
   const router = useRouter();
 
-  const turnstileRef =
-    useRef<TurnstileInstance | null>(null);
 
-  const [captchaToken, setCaptchaToken] =
-    useState("");
 
   const [fullName, setFullName] = useState("");
   const [mobile, setMobile] = useState("");
@@ -525,13 +518,6 @@ export default function TesterSignupForm() {
       return;
     }
 
-    if (!captchaToken) {
-      setErrorMessage(
-        "Please complete the CAPTCHA verification."
-      );
-      return;
-    }
-
     try {
       setIsLoading(true);
 
@@ -561,8 +547,6 @@ export default function TesterSignupForm() {
 
               pinCode:
                 pinCode.trim(),
-
-              captchaToken,
             }),
           }
         );
@@ -601,9 +585,6 @@ export default function TesterSignupForm() {
           "Unable to create account. The server returned an invalid response."
         );
 
-        turnstileRef.current?.reset();
-        setCaptchaToken("");
-
         return;
       }
 
@@ -615,9 +596,6 @@ export default function TesterSignupForm() {
           result.message ||
             "Unable to create Tester account."
         );
-
-        turnstileRef.current?.reset();
-        setCaptchaToken("");
 
         return;
       }
@@ -646,9 +624,6 @@ export default function TesterSignupForm() {
       setErrorMessage(
         "Unable to connect to the server. Please try again."
       );
-
-      turnstileRef.current?.reset();
-      setCaptchaToken("");
     } finally {
       setIsLoading(false);
     }
@@ -1088,37 +1063,7 @@ export default function TesterSignupForm() {
         </small>
       </div>
 
-      {/* ===================================== */}
-      {/* CLOUDFLARE TURNSTILE */}
-      {/* ===================================== */}
-      <div className="col-12">
-        <div className="captcha-wrapper my-2">
-          <Turnstile
-            ref={turnstileRef}
-            siteKey={
-              process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""
-            }
-            onSuccess={(token) => {
-              setCaptchaToken(token);
-            }}
-            onExpire={() => {
-              setCaptchaToken("");
-            }}
-            onError={(errorCode) => {
-              console.error("Turnstile error:", errorCode);
-              setCaptchaToken("");
-              setErrorMessage(
-                "CAPTCHA verification failed. Please try again."
-              );
-            }}
-            options={{
-              theme: "auto",
-              size: "normal",
-              action: "tester_signup",
-            }}
-          />
-        </div>
-      </div>
+
 
       {/* ===================================== */}
       {/* WHATSAPP CAMPAIGN CONSENT PERMISSION */}
@@ -1265,7 +1210,7 @@ export default function TesterSignupForm() {
           type="submit"
           className="btn-login w-100"
           disabled={
-            isLoading || !mobileVerified || !captchaToken || !whatsappConsent
+            isLoading || !mobileVerified || !whatsappConsent
           }
         >
           {isLoading ? (

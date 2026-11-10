@@ -5,19 +5,12 @@ import type { FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import {
-  Turnstile,
-  type TurnstileInstance,
-} from "@marsidev/react-turnstile";
+
 
 export default function BrandSignupForm() {
   const router = useRouter();
 
-  const turnstileRef =
-    useRef<TurnstileInstance | null>(null);
 
-  const [captchaToken, setCaptchaToken] =
-    useState("");
 
   // ============================================================
   // FORM STATE
@@ -260,13 +253,6 @@ export default function BrandSignupForm() {
       return;
     }
 
-    if (!captchaToken) {
-      setErrorMessage(
-        "Please complete the CAPTCHA verification."
-      );
-      return;
-    }
-
     try {
       setIsLoading(true);
 
@@ -299,7 +285,6 @@ export default function BrandSignupForm() {
                   .toLowerCase(),
 
               password,
-              captchaToken,
             }),
           }
         );
@@ -339,9 +324,6 @@ export default function BrandSignupForm() {
           "Unable to create account. The server returned an invalid response."
         );
 
-        turnstileRef.current?.reset();
-        setCaptchaToken("");
-
         return;
       }
 
@@ -356,9 +338,6 @@ export default function BrandSignupForm() {
             result.message ||
               "Unable to create Brand account."
           );
-
-          turnstileRef.current?.reset();
-          setCaptchaToken("");
 
           return;
         }
@@ -377,9 +356,6 @@ export default function BrandSignupForm() {
       setErrorMessage(
         "Unable to connect to the server. Please try again."
       );
-
-      turnstileRef.current?.reset();
-      setCaptchaToken("");
     } finally {
       setIsLoading(false);
     }
@@ -680,44 +656,6 @@ export default function BrandSignupForm() {
         </div>
 
         {/* ==================================================== */}
-        {/* CLOUDFLARE TURNSTILE */}
-        {/* ==================================================== */}
-        <div className="col-12 d-flex justify-content-center pt-2">
-          <div className="captcha-wrapper">
-            <Turnstile
-              ref={turnstileRef}
-              siteKey={
-                process.env
-                  .NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""
-              }
-              onSuccess={(token) => {
-                setCaptchaToken(token);
-              }}
-              onExpire={() => {
-                setCaptchaToken("");
-              }}
-              onError={(errorCode) => {
-                console.error(
-                  "Turnstile error:",
-                  errorCode
-                );
-
-                setCaptchaToken("");
-
-                setErrorMessage(
-                  "CAPTCHA verification failed. Please try again."
-                );
-              }}
-              options={{
-                theme: "auto",
-                size: "normal",
-                action: "brand_signup",
-              }}
-            />
-          </div>
-        </div>
-
-        {/* ==================================================== */}
         {/* SUBMIT */}
         {/* ==================================================== */}
         <div className="col-12 pt-2">
@@ -725,8 +663,7 @@ export default function BrandSignupForm() {
             type="submit"
             className="btn-login"
             disabled={
-              isLoading ||
-              !captchaToken
+              isLoading
             }
           >
             {isLoading ? (

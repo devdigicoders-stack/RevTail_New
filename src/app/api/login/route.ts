@@ -3,6 +3,14 @@ import bcrypt from "bcryptjs";
 
 import prisma from "@/lib/prisma";
 import { createToken } from "@/lib/auth";
+import {
+  ADMIN_LOGIN_OTP_COOKIE,
+  ADMIN_LOGIN_OTP_EXPIRY_SECONDS,
+  createAdminLoginOtpToken,
+  generateAdminLoginOtp,
+  maskEmail,
+} from "@/lib/admin-login-otp";
+import { sendAdminLoginOtpEmail } from "@/lib/mailer";
 
 /*
  * ------------------------------------------------
@@ -546,6 +554,74 @@ export async function POST(
     loginAttempts.delete(
       rateLimitKey
     );
+
+    /*
+     * ------------------------------------------------
+     * 8B. ADMIN TWO-FACTOR AUTHENTICATION (EMAIL OTP)
+     * ------------------------------------------------
+     *
+     * For ADMIN role, send an OTP to admin email and require verification.
+     */
+    if (user.role === "ADMIN") {
+      if (!user.email) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Admin email address not found on account.",
+          },
+          { status: 500 }
+        );
+      }
+
+      const otp = generateAdminLoginOtp();
+
+      try {
+        await sendAdminLoginOtpEmail({
+          to: user.email,
+          otp,
+        });
+      } catch (mailError) {
+        console.error("ADMIN LOGIN EMAIL FAILED:", mailError);
+        return NextResponse.json(
+          {
+            success: false,
+            message:
+              "Unable to send verification OTP to admin email. Please verify SMTP settings.",
+          },
+          { status: 500 }
+        );
+      }
+
+      const otpToken = createAdminLoginOtpToken({
+        userId: user.id,
+        email: user.email,
+        otp,
+      });
+
+      const response = NextResponse.json(
+        {
+          success: true,
+          requiresOtp: true,
+          role: "ADMIN",
+          email: maskEmail(user.email),
+          message:
+            "A verification code has been sent to your registered admin email.",
+        },
+        { status: 200 }
+      );
+
+      response.cookies.set({
+        name: ADMIN_LOGIN_OTP_COOKIE,
+        value: otpToken,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: ADMIN_LOGIN_OTP_EXPIRY_SECONDS,
+        path: "/",
+      });
+
+      return response;
+    }
 
     /*
      * ------------------------------------------------

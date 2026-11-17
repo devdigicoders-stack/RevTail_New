@@ -311,6 +311,75 @@ export async function sendCampaignCompletedEmail({
   });
 }
 
+type AdminLoginOtpEmailInput = {
+  to: string;
+  otp: string;
+};
+
+export async function sendAdminLoginOtpEmail({
+  to,
+  otp,
+}: AdminLoginOtpEmailInput) {
+  if (!smtpHost || !smtpUser || !smtpPass) {
+    throw new Error("SMTP configuration is incomplete.");
+  }
+
+  if (!to?.trim()) {
+    throw new Error("Admin email address is required.");
+  }
+
+  return transporter.sendMail({
+    from: smtpFrom,
+    to: to.trim(),
+    subject: `Revtail Admin - Login Verification Code (${otp})`,
+    text:
+      `Hello Admin,\n\n` +
+      `Your one-time login verification code for Revtail Admin Dashboard is:\n\n` +
+      `   ${otp}\n\n` +
+      `This code is valid for 5 minutes. Please do not share this code with anyone.\n\n` +
+      `If you did not request this login code, please secure your account immediately.\n\n` +
+      `Regards,\n` +
+      `Revtail Security Team`,
+    html: `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 32px 24px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; color: #1e293b;">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <h2 style="color: #0d3b66; margin: 0 0 6px 0; font-size: 22px; font-weight: 700;">Revtail Admin</h2>
+          <p style="color: #64748b; margin: 0; font-size: 13px;">Login Verification Code</p>
+        </div>
+
+        <p style="font-size: 15px; line-height: 1.6; margin: 0 0 14px 0;">
+          Hello <strong>Admin</strong>,
+        </p>
+
+        <p style="font-size: 14px; line-height: 1.6; color: #475569; margin: 0 0 20px 0;">
+          A login attempt was made for your Revtail Admin account. Use the one-time verification code below to complete your sign-in:
+        </p>
+
+        <div style="background: #f8fafc; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 24px; border: 1px dashed #cbd5e1;">
+          <span style="font-size: 34px; font-weight: 800; letter-spacing: 8px; color: #0d3b66; font-family: monospace;">
+            ${otp}
+          </span>
+          <div style="margin-top: 8px; font-size: 12px; color: #64748b;">
+            Valid for <strong>5 minutes</strong>
+          </div>
+        </div>
+
+        <p style="font-size: 13px; line-height: 1.6; color: #64748b; margin: 0 0 16px 0;">
+          <strong>Security Notice:</strong> Do not share this code with anyone. Revtail support will never ask for your verification code.
+        </p>
+
+        <p style="font-size: 12px; line-height: 1.5; color: #94a3b8; border-top: 1px solid #f1f5f9; padding-top: 16px; margin: 0;">
+          If you did not initiate this login request, please change your password immediately.
+        </p>
+
+        <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #94a3b8;">
+          &copy; ${new Date().getFullYear()} Revtail. All rights reserved.
+        </div>
+      </div>
+    `,
+  });
+}
+
 
 function escapeHtml(
   value: string

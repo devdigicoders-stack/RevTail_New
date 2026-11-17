@@ -184,6 +184,8 @@ export async function POST(
 
           message:
             "Mobile number verified successfully.",
+
+          verifiedToken,
         }
       );
 

@@ -71,6 +71,11 @@ export default function TesterSignupForm() {
   ] = useState(false);
 
   const [
+    verifiedToken,
+    setVerifiedToken,
+  ] = useState("");
+
+  const [
     isSendingOtp,
     setIsSendingOtp,
   ] = useState(false);
@@ -146,6 +151,8 @@ export default function TesterSignupForm() {
             "/api/tester/signup/otp/send",
             {
               method: "POST",
+
+              credentials: "include",
 
               headers: {
                 "Content-Type":
@@ -280,6 +287,8 @@ export default function TesterSignupForm() {
             {
               method: "POST",
 
+              credentials: "include",
+
               headers: {
                 "Content-Type":
                   "application/json",
@@ -339,6 +348,10 @@ export default function TesterSignupForm() {
           );
 
           return;
+        }
+
+        if (result.verifiedToken) {
+          setVerifiedToken(result.verifiedToken);
         }
 
         setMobileVerified(
@@ -527,6 +540,8 @@ export default function TesterSignupForm() {
           {
             method: "POST",
 
+            credentials: "include",
+
             headers: {
               "Content-Type":
                 "application/json",
@@ -547,6 +562,8 @@ export default function TesterSignupForm() {
 
               pinCode:
                 pinCode.trim(),
+
+              verifiedToken,
             }),
           }
         );
@@ -596,6 +613,11 @@ export default function TesterSignupForm() {
           result.message ||
             "Unable to create Tester account."
         );
+
+        if (result.message?.includes("verify your mobile number")) {
+          setMobileVerified(false);
+          setVerifiedToken("");
+        }
 
         return;
       }
@@ -708,6 +730,7 @@ export default function TesterSignupForm() {
                 setOtp("");
                 setOtpSent(false);
                 setMobileVerified(false);
+                setVerifiedToken("");
                 setResendSeconds(0);
                 setSuccessMessage("");
                 setErrorMessage("");

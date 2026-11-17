@@ -55,6 +55,8 @@ export async function POST(request: NextRequest) {
     // Store Tester mobile consistently as a 10-digit Indian number.
     const normalizedMobile = rawMobile.startsWith("+91")
       ? rawMobile.slice(3)
+      : rawMobile.startsWith("0") && rawMobile.length === 11
+      ? rawMobile.slice(1)
       : rawMobile;
 
     // ------------------------------------------------
@@ -76,10 +78,11 @@ export async function POST(request: NextRequest) {
     // 4. Verify WhatsApp OTP confirmation
     // ------------------------------------------------
 
-      const verifiedToken =
-        request.cookies.get(
-          TESTER_SIGNUP_VERIFIED_COOKIE
-        )?.value;
+    const verifiedToken =
+      body.verifiedToken ||
+      request.cookies.get(
+        TESTER_SIGNUP_VERIFIED_COOKIE
+      )?.value;
 
       const mobileVerified =
         verifySignupVerifiedToken(

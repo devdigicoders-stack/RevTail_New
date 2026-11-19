@@ -45,6 +45,18 @@ export default function TesterSignupPage() {
               <p className="login-subtitle mb-2">
                 Register using your mobile number to test authentic products and receive guaranteed cash rewards.
               </p>
+              <div className="mt-3">
+                <a
+                  href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="d-inline-flex align-items-center gap-2 text-decoration-none px-3 py-1.5 rounded-pill bg-light border border-light-subtle text-secondary"
+                  style={{ fontSize: "12.5px" }}
+                >
+                  <i className="bi bi-google-play text-success fs-15"></i>
+                  <span>Prefer mobile? <strong>Download Revtail Tester App</strong> &rarr;</span>
+                </a>
+              </div>
             </div>
 
             <TesterSignupForm />

@@ -135,6 +135,17 @@ export default function PublicMobileMenu() {
                 <p className="mobile-section-label">Get Started</p>
                 <div className="d-flex flex-column gap-2">
                   <a
+                    href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn w-100 py-2 fw-semibold text-white d-flex align-items-center justify-content-center gap-2"
+                    style={{ backgroundColor: "#0f172a", borderRadius: "8px", fontSize: "14px" }}
+                    onClick={() => setOpen(false)}
+                  >
+                    <i className="bi bi-google-play" style={{ color: "#34d399" }}></i> Download Tester App (Play Store)
+                  </a>
+
+                  <a
                     href="/tester/signup"
                     className="btn w-100 py-2 fw-semibold text-white"
                     style={{ backgroundColor: "#012977", borderRadius: "8px", fontSize: "14px" }}

@@ -89,6 +89,16 @@ export default function PublicLayout({
 
                 <div className="d-flex align-items-center gap-3" style={{ fontSize: "12px", color: "#94a3b8" }}>
                   <a
+                    href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="badge d-inline-flex align-items-center gap-1 px-2.5 py-1 text-decoration-none"
+                    style={{ backgroundColor: "rgba(52, 211, 153, 0.15)", color: "#34d399", border: "1px solid rgba(52, 211, 153, 0.3)", fontSize: "11.5px", fontWeight: 600 }}
+                  >
+                    <i className="bi bi-google-play"></i> Get Android App
+                  </a>
+                  <span style={{ opacity: 0.3 }}>|</span>
+                  <a
                     href="tel:+918341675736"
                     style={{ color: "#cbd5e1", textDecoration: "none", whiteSpace: "nowrap" }}
                   >
@@ -120,18 +130,36 @@ export default function PublicLayout({
               borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
             }}
           >
-            <span>Are you a brand?</span>{" "}
-            <a
-              href="/brand/signup"
-              style={{
-                color: "#ffffff",
-                fontWeight: 600,
-                textDecoration: "underline",
-                marginLeft: "4px",
-              }}
-            >
-              Register now &rarr;
-            </a>
+            <div className="d-flex justify-content-between align-items-center">
+              <span>
+                Are you a brand?{" "}
+                <a
+                  href="/brand/signup"
+                  style={{
+                    color: "#ffffff",
+                    fontWeight: 600,
+                    textDecoration: "underline",
+                  }}
+                >
+                  Register &rarr;
+                </a>
+              </span>
+              <a
+                href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "#38bdf8",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                }}
+              >
+                <i className="bi bi-google-play"></i> Get App
+              </a>
+            </div>
           </div>
 
           <nav
@@ -320,6 +348,17 @@ export default function PublicLayout({
                   <li><a href="/refund-cancellation-policy" className="text-secondary text-decoration-none fw-medium" style={{ fontSize: "14px" }}>Refund Policy</a></li>
                   <li><a href="/rewards-reimbursement-policy" className="text-secondary text-decoration-none fw-medium" style={{ fontSize: "14px" }}>Rewards</a></li>
                   <li><a href="/faq" className="text-secondary text-decoration-none fw-medium" style={{ fontSize: "14px" }}>FAQs</a></li>
+                  <li>
+                    <a
+                      href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-success text-decoration-none fw-semibold d-inline-flex align-items-center gap-1"
+                      style={{ fontSize: "14px" }}
+                    >
+                      <i className="bi bi-google-play"></i> Tester App
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -329,12 +368,23 @@ export default function PublicLayout({
                 <div className="divider-style-03 divider-style-03-01 border border-color-extra-medium-gray" />
               </div>
 
-              <div className="col-12 col-md-7 fs-14 lh-24 text-center text-md-start mb-3 mb-md-0">
+              <div className="col-12 col-md-6 fs-14 lh-24 text-center text-md-start mb-3 mb-md-0">
                 <p className="mb-0 text-muted">&copy; 2026 Revtail. All Rights Reserved.</p>
               </div>
 
-              <div className="col-12 col-md-5 text-center text-md-end">
-                <div className="d-inline-flex align-items-center justify-content-center justify-content-md-end gap-2">
+              <div className="col-12 col-md-6 text-center text-md-end">
+                <div className="d-inline-flex flex-wrap align-items-center justify-content-center justify-content-md-end gap-2">
+                  <a
+                    href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-sm btn-dark d-inline-flex align-items-center gap-2 px-3 py-1.5 text-white text-decoration-none rounded-pill me-1"
+                    style={{ fontSize: "12px", fontWeight: 600, backgroundColor: "#0f172a" }}
+                    title="Download on Google Play Store"
+                  >
+                    <i className="bi bi-google-play" style={{ color: "#34d399" }}></i> Google Play
+                  </a>
+
                   <a
                     className="footer-social-btn"
                     href="https://www.facebook.com/share/19FkYiJGnN/"

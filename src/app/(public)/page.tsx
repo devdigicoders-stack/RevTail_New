@@ -70,17 +70,33 @@ export default function Home() {
           <p className="alt-font fs-18 text-muted mb-35px">
             Claim free full-sized products from leading D2C brands, test them at home, share your honest feedback, and earn rewards instantly.
           </p>
-          <a
-            href="/tester/signup"
-            className="btn btn-textclr btn-extra-large btn-hover-animation-switch btn-round-edge btn-box-shadow me-25px"
-            style={{ backgroundColor: "#012977", borderColor: "#012977", color: "#ffffff" }}
-          >
-            <span> 
-                <span className="btn-text">Join as a Tester</span>
-                <span className="btn-icon"><i className="feather icon-feather-arrow-right"></i></span>
-                <span className="btn-icon"><i className="feather icon-feather-arrow-right"></i></span>
-            </span>
-          </a>
+          <div className="d-flex flex-wrap gap-3 align-items-center mb-3">
+            <a
+              href="/tester/signup"
+              className="btn btn-textclr btn-extra-large btn-hover-animation-switch btn-round-edge btn-box-shadow"
+              style={{ backgroundColor: "#012977", borderColor: "#012977", color: "#ffffff" }}
+            >
+              <span> 
+                  <span className="btn-text">Join as a Tester</span>
+                  <span className="btn-icon"><i className="feather icon-feather-arrow-right"></i></span>
+                  <span className="btn-icon"><i className="feather icon-feather-arrow-right"></i></span>
+              </span>
+            </a>
+            <a
+              href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-dark btn-extra-large btn-round-edge d-inline-flex align-items-center gap-2 px-3 py-2 text-decoration-none shadow-sm"
+              style={{ backgroundColor: "#0f172a", borderColor: "#0f172a" }}
+              title="Download Revtail Tester App on Google Play"
+            >
+              <i className="bi bi-google-play fs-20" style={{ color: "#34d399" }}></i>
+              <div className="text-start lh-1">
+                <span className="d-block text-white-50" style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Get it on</span>
+                <span className="fw-bold text-white" style={{ fontSize: "14px" }}>Google Play</span>
+              </div>
+            </a>
+          </div>
         </div>
         <div className="col-lg-6 text-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -270,13 +286,69 @@ export default function Home() {
 
 
 
-<div className="banner-container">
-  <div className="banner-content">
-    <h2 className="banner-title text-white">Ready to try your first product?</h2>
-    <p className="banner-subtitle">Sign up as a tester and get matched with a product to try, review, and get paid.</p>
-    <a href="/tester/signup" className="banner-btn">Start testing products</a>
-  </div>
-</div>
+      {/* Dedicated App Download Showcase Section */}
+      <section className="py-4 py-lg-5 my-4 bg-light rounded-4 border p-4 p-lg-5 position-relative overflow-hidden">
+        <div className="row align-items-center g-4">
+          <div className="col-12 col-lg-7 text-center text-lg-start">
+            <span className="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold mb-3 fs-13 border border-success-subtle">
+              <i className="bi bi-phone me-1"></i> Official Android App Live
+            </span>
+            <h3 className="fw-bold text-dark-gray mb-3" style={{ fontSize: "28px", letterSpacing: "-0.01em" }}>
+              Test Products & Earn on the Go with Revtail App
+            </h3>
+            <p className="text-muted fs-16 mb-4 lh-lg">
+              Get matched with products, order them online, submit proof of purchase, upload feedback, and transfer your rewards directly to your bank account — all from your Android smartphone.
+            </p>
+            <div className="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start align-items-center">
+              <a
+                href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-dark d-inline-flex align-items-center gap-3 px-4 py-2 rounded-3 text-decoration-none shadow"
+                style={{ backgroundColor: "#000000", minHeight: "52px" }}
+              >
+                <i className="bi bi-google-play fs-28" style={{ color: "#34d399" }}></i>
+                <div className="text-start lh-1">
+                  <div className="text-white-50" style={{ fontSize: "11px", letterSpacing: "0.5px" }}>GET IT ON</div>
+                  <div className="fw-bold text-white fs-16">Google Play</div>
+                </div>
+              </a>
+              <div className="text-muted fs-13 d-flex align-items-center gap-2">
+                <i className="bi bi-shield-check text-success fs-18"></i>
+                <span>Verified on Google Play Store</span>
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-lg-5 text-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/images/hero.jpg"
+              alt="Revtail Android App"
+              className="img-fluid rounded-4 shadow-sm"
+              style={{ maxHeight: "280px", objectFit: "cover", width: "100%" }}
+            />
+          </div>
+        </div>
+      </section>
+
+      <div className="banner-container">
+        <div className="banner-content">
+          <h2 className="banner-title text-white">Ready to try your first product?</h2>
+          <p className="banner-subtitle">Sign up as a tester and get matched with a product to try, review, and get paid.</p>
+          <div className="d-flex flex-wrap gap-3 justify-content-center align-items-center">
+            <a href="/tester/signup" className="banner-btn">Start testing products</a>
+            <a
+              href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-outline-light btn-round-edge d-inline-flex align-items-center gap-2 px-3 py-2 text-decoration-none"
+              style={{ borderRadius: "50px", fontWeight: 600, fontSize: "14px" }}
+            >
+              <i className="bi bi-google-play"></i> Get Android App
+            </a>
+          </div>
+        </div>
+      </div>
 
   
     </div>

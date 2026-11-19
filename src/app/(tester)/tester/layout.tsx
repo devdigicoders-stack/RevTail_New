@@ -350,6 +350,18 @@ export default async function TesterLayout({
               </li>
               <li className="sidebar-menu-item">
                 <Link
+                  href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="sidebar-menu-link"
+                  title="Download Android App"
+                >
+                  <i className="bi bi-google-play text-success"></i>
+                  <span>Download App</span>
+                </Link>
+              </li>
+              <li className="sidebar-menu-item">
+                <Link
                   href="https://chat.whatsapp.com/JLDLEwZWJTPJKhPl5XzWQD"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -542,6 +554,18 @@ export default async function TesterLayout({
                     <i className="bi bi-wallet2"></i>
                     Wallet
                   </Link>
+                </li>
+
+                <li>
+                  <a
+                    className="dropdown-item"
+                    href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i className="bi bi-google-play text-success"></i>
+                    Download Android App
+                  </a>
                 </li>
 
                 <li>

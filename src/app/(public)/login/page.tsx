@@ -55,7 +55,7 @@ export default function LoginPage() {
               <p className="text-muted text-center mb-3" style={{ fontSize: "13px" }}>
                 Don&apos;t have an account yet?
               </p>
-              <div className="auth-switch-grid">
+              <div className="auth-switch-grid mb-3">
                 <Link href="/tester/signup" className="btn-auth-switch text-nowrap">
                   <span className="d-flex align-items-center text-nowrap">
                     <i className="bi bi-person-check me-2 fs-15 text-primary"></i>
@@ -70,6 +70,19 @@ export default function LoginPage() {
                   </span>
                   <i className="bi bi-arrow-right text-muted ms-2"></i>
                 </Link>
+              </div>
+
+              <div className="text-center pt-2">
+                <a
+                  href="https://play.google.com/store/apps/details?id=digi.coders.revtailtester"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="d-inline-flex align-items-center gap-2 text-decoration-none px-3 py-2 rounded-3 bg-light border border-light-subtle text-secondary"
+                  style={{ fontSize: "12.5px" }}
+                >
+                  <i className="bi bi-google-play text-success fs-16"></i>
+                  <span>Are you a Tester? <strong>Download Android App</strong> &rarr;</span>
+                </a>
               </div>
             </div>
           </div>

@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -124,10 +126,122 @@ class _TesterWebViewScreenState extends State<TesterWebViewScreen> {
       AndroidWebViewController.enableDebugging(false);
       final androidController = controller.platform as AndroidWebViewController;
       androidController.setMediaPlaybackRequiresUserGesture(false);
+      androidController.setOnShowFileSelector(_androidFilePicker);
     }
 
     controller.loadRequest(Uri.parse(AppConfig.initialUrl));
     _controller = controller;
+  }
+
+  /// Handle Android HTML <input type="file"> triggers (Profile pic, proof screenshots, photos)
+  Future<List<String>> _androidFilePicker(FileSelectorParams params) async {
+    try {
+      final picker = ImagePicker();
+
+      // If multiple files are requested by the webpage
+      if (params.mode == FileSelectorMode.openMultiple) {
+        final List<XFile> images = await picker.pickMultiImage();
+        return images.map((img) => File(img.path).uri.toString()).toList();
+      }
+
+      // If capture is requested directly by the input (e.g. capture="camera")
+      if (params.isCaptureEnabled) {
+        final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+        if (photo != null) {
+          return [File(photo.path).uri.toString()];
+        }
+        return [];
+      }
+
+      // Show bottom sheet to choose between Gallery and Camera
+      final ImageSource? source = await showModalBottomSheet<ImageSource>(
+        context: context,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (context) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const Text(
+                  'Choose Photo',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0F172A),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(
+                      Icons.photo_library_rounded,
+                      color: Color(0xFF012977),
+                    ),
+                  ),
+                  title: const Text(
+                    'Choose from Gallery',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: const Text('Pick existing photos or images'),
+                  onTap: () => Navigator.pop(context, ImageSource.gallery),
+                ),
+                const SizedBox(height: 8),
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF0FDF4),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(
+                      Icons.camera_alt_rounded,
+                      color: Color(0xFF16A34A),
+                    ),
+                  ),
+                  title: const Text(
+                    'Take a Photo',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: const Text('Use camera to take a new picture'),
+                  onTap: () => Navigator.pop(context, ImageSource.camera),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      if (source == null) {
+        return [];
+      }
+
+      final XFile? image = await picker.pickImage(source: source);
+      if (image != null) {
+        return [File(image.path).uri.toString()];
+      }
+      return [];
+    } catch (e) {
+      debugPrint('Error picking file in WebView: $e');
+      return [];
+    }
   }
 
   /// Injects CSS to hide website marketing headers & footers on Login / Signup / Auth pages

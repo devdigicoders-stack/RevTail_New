@@ -9,6 +9,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -161,6 +162,7 @@ export default function TesterProfileForm({
   const [editingInterests, setEditingInterests] = useState(false);
   const [editingBank, setEditingBank] = useState(false);
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!profileImageFile) {
@@ -178,6 +180,10 @@ export default function TesterProfileForm({
     setInstagramId(profile?.instagramId ?? "");
     setProfileImage(profile?.profileImage ?? "");
     setProfileImageFile(null);
+    setProfileImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     setEditingProfile(false);
     resetMessages();
   }
@@ -514,6 +520,23 @@ export default function TesterProfileForm({
     setProfileImageFile(
       file
     );
+    setEditingProfile(true);
+  }
+
+  // Upload and persist the selected image immediately.
+  async function handleDirectProfilePhotoSave() {
+    if (!profileImageFile) return;
+    resetMessages();
+    setMessageSection("profile");
+    try {
+      const uploadedUrl = await uploadSelectedProfileImage(profileImageFile);
+      setProfileImage(uploadedUrl);
+      setProfileImageFile(null);
+      setMessage("Profile photo updated successfully!");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to update profile photo.";
+      setError(message);
+    }
   }
 
   // Upload the selected image as part of Save Profile, not separately.
@@ -1142,47 +1165,61 @@ export default function TesterProfileForm({
                       Profile Image
                     </label>
 
-                    <div className="border rounded-3 p-3">
+                    <div className="border rounded-3 p-3 bg-light-subtle">
 
                       <div className="d-flex flex-column flex-md-row align-items-md-center gap-3">
 
                         <div
-                          className="rounded-circle overflow-hidden bg-light d-flex align-items-center justify-content-center flex-shrink-0"
+                          className="position-relative rounded-circle overflow-hidden bg-light d-flex align-items-center justify-content-center flex-shrink-0"
                           style={{
-                            width:
-                              "88px",
-
-                            height:
-                              "88px",
+                            width: "90px",
+                            height: "90px",
+                            cursor: profileImageUploading ? "default" : "pointer",
+                            border: "2px solid #cbd5e1",
                           }}
+                          onClick={() => {
+                            if (!profileImageUploading) {
+                              fileInputRef.current?.click();
+                            }
+                          }}
+                          title="Click to select new profile photo"
                         >
 
-                          {profileImagePreview || profileImage ? (
-
-                            <img
-                              src={
-                                profileImagePreview || profileImage
-                              }
-                              alt={
-                                profile?.fullName ??
-                                "Tester profile"
-                              }
-                              style={{
-                                width:
-                                  "100%",
-
-                                height:
-                                  "100%",
-
-                                objectFit:
-                                  "cover",
-                              }}
-                            />
-
+                          {profileImageUploading ? (
+                            <div className="spinner-border text-primary spinner-border-sm" role="status">
+                              <span className="visually-hidden">Uploading...</span>
+                            </div>
+                          ) : profileImagePreview || profileImage ? (
+                            <>
+                              <img
+                                src={
+                                  profileImagePreview || profileImage
+                                }
+                                alt={
+                                  profile?.fullName ??
+                                  "Tester profile"
+                                }
+                                style={{
+                                  width:
+                                    "100%",
+                                  height:
+                                    "100%",
+                                  objectFit:
+                                    "cover",
+                                }}
+                              />
+                              <div
+                                className="position-absolute bottom-0 start-0 end-0 text-center py-1 bg-dark bg-opacity-75 text-white"
+                                style={{ fontSize: "11px", lineHeight: 1 }}
+                              >
+                                <i className="bi bi-camera-fill"></i>
+                              </div>
+                            </>
                           ) : (
-
-                            <i className="bi bi-person fs-2 text-muted"></i>
-
+                            <div className="text-center text-muted">
+                              <i className="bi bi-person fs-2 d-block"></i>
+                              <i className="bi bi-camera-fill text-primary" style={{ fontSize: "11px" }}></i>
+                            </div>
                           )}
 
                         </div>
@@ -1190,6 +1227,7 @@ export default function TesterProfileForm({
                         <div className="flex-grow-1">
 
                           <input
+                            ref={fileInputRef}
                             type="file"
                             className="form-control"
                             accept="image/jpeg,image/png,image/webp"
@@ -1197,30 +1235,52 @@ export default function TesterProfileForm({
                               handleProfileImageChange
                             }
                             disabled={
-                              profileImageUploading || !editingProfile
+                              profileImageUploading
                             }
                           />
 
                           <div className="form-text">
-                            JPG, PNG or WEBP. Maximum file size 5 MB.
+                            JPG, PNG or WEBP. Maximum file size 5 MB. Tap picture or Choose file to change.
                           </div>
 
                           {profileImageFile && (
-
-                            <div className="small text-muted mt-2">
-
-                              Selected:{" "}
-
-                              <strong>
-                                {
-                                  profileImageFile.name
-                                }
-                              </strong>
-
+                            <div className="d-flex flex-wrap align-items-center gap-2 mt-2">
+                              <span className="small text-muted">
+                                Selected: <strong>{profileImageFile.name}</strong>
+                              </span>
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-success d-inline-flex align-items-center gap-1"
+                                disabled={profileImageUploading}
+                                onClick={handleDirectProfilePhotoSave}
+                              >
+                                {profileImageUploading ? (
+                                  <>
+                                    <span className="spinner-border spinner-border-sm me-1" />
+                                    Saving...
+                                  </>
+                                ) : (
+                                  <>
+                                    <i className="bi bi-check2-circle"></i>
+                                    Save Photo Now
+                                  </>
+                                )}
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-outline-secondary"
+                                disabled={profileImageUploading}
+                                onClick={() => {
+                                  setProfileImageFile(null);
+                                  if (fileInputRef.current) {
+                                    fileInputRef.current.value = "";
+                                  }
+                                }}
+                              >
+                                Discard
+                              </button>
                             </div>
-
                           )}
-
 
                         </div>
 

@@ -10,6 +10,7 @@ import {
 
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/current-user";
+import { sendPushNotification } from "@/lib/notification";
 
 export async function PATCH(
   request: NextRequest,
@@ -141,6 +142,13 @@ export async function PATCH(
           testerProfileId: true,
 
           testerCampaignId: true,
+
+          testerProfile: {
+            select: {
+              userId: true,
+              fullName: true,
+            },
+          },
         },
       });
 
@@ -198,6 +206,23 @@ export async function PATCH(
           },
         });
 
+      // Send Push Notification
+      try {
+        await sendPushNotification({
+          userId: paymentRequest.testerProfile.userId,
+          title: "Payment Request Update",
+          body: rejectionReason
+            ? `Your payout request of ₹${paymentRequest.amount} was rejected: ${rejectionReason}`
+            : `Your payout request of ₹${paymentRequest.amount} was rejected.`,
+          data: {
+            type: "PAYMENT_REJECTED",
+            paymentRequestId: String(paymentRequest.id),
+          },
+        });
+      } catch (fcmError) {
+        console.error("FCM Payment Reject Error:", fcmError);
+      }
+
       return NextResponse.json(
         {
           success: true,
@@ -251,6 +276,21 @@ export async function PATCH(
             null,
         },
       });
+
+    // Send Push Notification
+    try {
+      await sendPushNotification({
+        userId: paymentRequest.testerProfile.userId,
+        title: "Payment Request Approved",
+        body: `Your payout request of ₹${paymentRequest.amount} has been approved and is queued for processing.`,
+        data: {
+          type: "PAYMENT_APPROVED",
+          paymentRequestId: String(paymentRequest.id),
+        },
+      });
+    } catch (fcmError) {
+      console.error("FCM Payment Approve Error:", fcmError);
+    }
 
     return NextResponse.json(
       {

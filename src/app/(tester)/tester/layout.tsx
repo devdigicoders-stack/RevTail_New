@@ -9,6 +9,7 @@ import DashboardSidebarController from "../../components/DashboardSidebarControl
 import LogoutButton from "@/components/auth/LogoutButton";
 import TesterBottomNav from "@/components/tester/TesterBottomNav";
 import TesterHeaderGreeting from "@/components/tester/TesterHeaderGreeting";
+import FCMTokenBridge from "@/components/tester/FCMTokenBridge";
 
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/current-user";
@@ -600,6 +601,7 @@ export default async function TesterLayout({
       ======================================================== */}
 
       <TesterBottomNav />
+      <FCMTokenBridge />
       
       {/* ========================================================
           VENDOR SCRIPTS

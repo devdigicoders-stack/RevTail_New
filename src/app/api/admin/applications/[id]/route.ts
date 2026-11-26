@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/current-user";
 import { sendWhatsAppTemplate } from "@/lib/whatsapp";
+import { sendPushNotification } from "@/lib/notification";
 
 // Send after the database action succeeds so delivery failures cannot
 // undo an approval, rejection, campaign enrollment, or slot allocation.
@@ -386,6 +387,7 @@ export async function PATCH(
           testerProfile: {
             select: {
               id: true,
+              userId: true,
               approvalStatus: true,
               fullName: true,
               user: {
@@ -506,6 +508,24 @@ export async function PATCH(
         existingApplication.testerProfile.fullName,
         existingApplication.campaign.productName
       );
+
+      // Send Push Notification
+      try {
+        await sendPushNotification({
+          userId: existingApplication.testerProfile.userId,
+          title: "Campaign Application Update",
+          body: reason
+            ? `Your application for ${existingApplication.campaign.productName} was not accepted: ${reason}`
+            : `Your application for ${existingApplication.campaign.productName} was not accepted.`,
+          data: {
+            type: "CAMPAIGN_APPLICATION_REJECTED",
+            campaignId: String(existingApplication.campaignId),
+            applicationId: String(applicationId),
+          },
+        });
+      } catch (fcmError) {
+        console.error("FCM Application Rejection Error:", fcmError);
+      }
 
       return NextResponse.json({
         success: true,
@@ -833,6 +853,10 @@ export async function PATCH(
             status:
               "APPROVED" as const,
           };
+        },
+        {
+          maxWait: 15000,
+          timeout: 20000,
         }
       );
 
@@ -848,6 +872,22 @@ export async function PATCH(
       existingApplication.testerProfile.fullName,
       existingApplication.campaign.productName
     );
+
+    // Send Push Notification
+    try {
+      await sendPushNotification({
+        userId: existingApplication.testerProfile.userId,
+        title: "🎉 Campaign Application Approved!",
+        body: `You have been selected for campaign: ${existingApplication.campaign.productName}! Task 1 is now available.`,
+        data: {
+          type: "CAMPAIGN_APPLICATION_APPROVED",
+          campaignId: String(existingApplication.campaignId),
+          applicationId: String(applicationId),
+        },
+      });
+    } catch (fcmError) {
+      console.error("FCM Application Approval Error:", fcmError);
+    }
 
     return NextResponse.json({
       success: true,

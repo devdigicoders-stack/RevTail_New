@@ -1,0 +1,250 @@
+{
+  "project_info": {
+    "project_number": "833472295992",
+    "project_id": "tt-crm-f6a6c",
+    "storage_bucket": "tt-crm-f6a6c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833472295992:android:a7d3c79912fa79bdb8a2cd",
+        "android_client_info": {
+          "package_name": "com.digicoders.contractbaza.vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7ABVwbVXAqDcllJUKjXYubg4HwqDZ3YM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833472295992:android:ea28d2745bb3c6afb8a2cd",
+        "android_client_info": {
+          "package_name": "com.digicoders.contractbazaar.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7ABVwbVXAqDcllJUKjXYubg4HwqDZ3YM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833472295992:android:06a24a91f3854ef9b8a2cd",
+        "android_client_info": {
+          "package_name": "com.digicoders.contractbazaar.delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7ABVwbVXAqDcllJUKjXYubg4HwqDZ3YM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833472295992:android:fa93ace1163d16c8b8a2cd",
+        "android_client_info": {
+          "package_name": "digi.coders.machinewala"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7ABVwbVXAqDcllJUKjXYubg4HwqDZ3YM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833472295992:android:32c5d865aaa779d1b8a2cd",
+        "android_client_info": {
+          "package_name": "digi.coders.mirchimasala"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7ABVwbVXAqDcllJUKjXYubg4HwqDZ3YM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833472295992:android:6cb592dfa328da34b8a2cd",
+        "android_client_info": {
+          "package_name": "digi.coders.nuogmapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833472295992-ecn18h2kn4fesotgl8v41tl4fjikpjus.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digi.coders.nuogmapp",
+            "certificate_hash": "ad56dd278eb0c148cc27cb173f70d4406c5408c6"
+          }
+        },
+        {
+          "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7ABVwbVXAqDcllJUKjXYubg4HwqDZ3YM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833472295992:android:b97a3cfcc0853cbdb8a2cd",
+        "android_client_info": {
+          "package_name": "digi.coders.revtailtester"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7ABVwbVXAqDcllJUKjXYubg4HwqDZ3YM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833472295992:android:a9a4f4a669913df1b8a2cd",
+        "android_client_info": {
+          "package_name": "digi.coders.tt_crm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7ABVwbVXAqDcllJUKjXYubg4HwqDZ3YM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833472295992-ae02p9mv0nisilpq1f85c1e70b2vp69h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

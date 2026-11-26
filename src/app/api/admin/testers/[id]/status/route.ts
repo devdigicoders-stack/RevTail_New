@@ -6,6 +6,7 @@ import {
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/current-user";
 import { sendWhatsAppTemplate } from "@/lib/whatsapp";
+import { sendPushNotification } from "@/lib/notification";
 
 // ============================================================
 // Here [id] is the TesterProfile ID, not User ID.
@@ -299,6 +300,10 @@ export async function PATCH(
               id: true,
             },
           });
+        },
+        {
+          maxWait: 15000,
+          timeout: 20000,
         }
       );
 
@@ -359,6 +364,18 @@ export async function PATCH(
       } else {
         whatsappError =
           "Tester mobile number is not available.";
+      }
+
+      // Send Push Notification for Approval
+      try {
+        await sendPushNotification({
+          userId: tester.userId,
+          title: "🎉 Profile Approved!",
+          body: `Congratulations ${tester.fullName}, your tester profile has been approved! You can now participate in campaigns.`,
+          data: { type: "PROFILE_APPROVED" },
+        });
+      } catch (fcmError) {
+        console.error("FCM Profile Approval Error:", fcmError);
       }
 
       return NextResponse.json({
@@ -439,6 +456,10 @@ export async function PATCH(
               userId:
                 tester.userId,
             };
+          },
+          {
+            maxWait: 15000,
+            timeout: 20000,
           }
         );
 
@@ -500,6 +521,18 @@ export async function PATCH(
       } else {
         whatsappError =
           "Tester mobile number is not available.";
+      }
+
+      // Send Push Notification
+      try {
+        await sendPushNotification({
+          userId: tester.userId,
+          title: "❌ Profile Update",
+          body: reason ? `Your tester profile was rejected: ${reason}` : "Your tester profile registration was rejected.",
+          data: { type: "PROFILE_REJECTED" },
+        });
+      } catch (fcmError) {
+        console.error("FCM Profile Rejection Error:", fcmError);
       }
 
       return NextResponse.json({

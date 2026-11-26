@@ -15,6 +15,7 @@ const prismaClientSingleton = () => {
     password: decodeURIComponent(dbUrl.password),
     database: dbUrl.pathname.slice(1), // strips the leading "/"
     allowPublicKeyRetrieval: true,
+    connectTimeout: 30000,
     ssl: sslRequired ? { rejectUnauthorized: false } : undefined,
   })
 

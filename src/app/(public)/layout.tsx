@@ -1,6 +1,7 @@
 import React from "react";
 import Script from "next/script";
 import PublicMobileMenu from "@/components/layout/PublicMobileMenu";
+import FCMTokenBridge from "@/components/tester/FCMTokenBridge";
 
 import "../../../public/assets/css/vendors.min.css";
 import "../../../public/assets/css/icon.min.css";
@@ -423,7 +424,11 @@ export default function PublicLayout({
           Keep the original theme libraries for page animations/widgets.
           The mobile menu no longer depends on any of these scripts.
         */}
-        <Script src="/assets/js/jquery.js" strategy="beforeInteractive" />
+        <Script
+          id="jquery-js"
+          src="/assets/js/jquery.js"
+          strategy="afterInteractive"
+        />
 
         <Script
           id="vendors-js"
@@ -436,6 +441,7 @@ export default function PublicLayout({
           src="/assets/js/main.js"
           strategy="afterInteractive"
         />
+        <FCMTokenBridge />
       </div>
     </>
   );

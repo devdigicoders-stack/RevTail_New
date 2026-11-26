@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/current-user";
 import { sendWhatsAppTemplate } from "@/lib/whatsapp";
+import { sendPushNotification } from "@/lib/notification";
 
 function isAny(value: string | null | undefined) {
   if (!value) return true;
@@ -74,6 +75,7 @@ export async function POST(request: NextRequest) {
         gender: true,
         state: true,
         city: true,
+        userId: true,
         user: {
           select: {
             mobile: true,
@@ -228,6 +230,23 @@ export async function POST(request: NextRequest) {
               error: whatsappError,
             }
           );
+        }
+
+        // Send FCM Push Notification
+        try {
+          if (tester.userId) {
+            await sendPushNotification({
+              userId: tester.userId,
+              title: "🎁 You're Invited to a Campaign!",
+              body: `You have been invited to participate in "${campaign.productName}". Check your invitations and accept now!`,
+              data: {
+                type: "CAMPAIGN_INVITATION",
+                campaignId: String(campaignId),
+              },
+            });
+          }
+        } catch (fcmError) {
+          console.error("FCM Invitation Error:", fcmError);
         }
       }
     }

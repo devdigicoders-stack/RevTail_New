@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
+import { sendPushNotification } from "@/lib/notification";
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -213,7 +214,24 @@ export async function PATCH(request: NextRequest) {
     );
 
     // --------------------------------------------------
-    // 8. Response
+    // 8. Push Notification
+    // --------------------------------------------------
+
+    try {
+      await sendPushNotification({
+        userId: parsedUserId,
+        title: "✨ Profile Completed!",
+        body: "Your profile details have been submitted. Our team will review your account shortly.",
+        data: {
+          type: "PROFILE_COMPLETED",
+        },
+      });
+    } catch (fcmError) {
+      console.error("FCM Profile Completed Error:", fcmError);
+    }
+
+    // --------------------------------------------------
+    // 9. Response
     // --------------------------------------------------
 
     return NextResponse.json(

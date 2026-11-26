@@ -9,6 +9,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import '../config/app_config.dart';
+import '../services/notification_service.dart';
 import 'no_internet_screen.dart';
 
 class TesterWebViewScreen extends StatefulWidget {
@@ -101,6 +102,7 @@ class _TesterWebViewScreenState extends State<TesterWebViewScreen> {
               });
             }
             _injectAuthPageCleanStyle(url);
+            _injectFCMTokenBridge();
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint('WebView Resource Error: ${error.errorCode} - ${error.description}');
@@ -324,6 +326,30 @@ class _TesterWebViewScreenState extends State<TesterWebViewScreen> {
       }
     } catch (e) {
       debugPrint('Error launching external URL $uri: $e');
+    }
+  }
+
+  /// Inject FCM Token into WebView page context
+  Future<void> _injectFCMTokenBridge() async {
+    final token = NotificationService.currentToken;
+    if (token != null && token.isNotEmpty) {
+      final js = '''
+        if (typeof window.syncFCMToken === 'function') {
+          window.syncFCMToken('$token');
+        } else {
+          localStorage.setItem('fcm_device_token', '$token');
+          fetch('/api/tester/fcm-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: '$token', platform: 'android' })
+          }).catch(function(e){ console.error(e); });
+        }
+      ''';
+      try {
+        await _controller.runJavaScript(js);
+      } catch (e) {
+        debugPrint('Error injecting FCM token bridge: $e');
+      }
     }
   }
 

@@ -5,6 +5,7 @@ import {
 
 import prisma from "@/lib/prisma";
 import { sendWhatsAppTemplate } from "@/lib/whatsapp";
+import { sendPushNotification } from "@/lib/notification";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/lib/current-user";
 
@@ -171,6 +172,7 @@ export async function PATCH(
 
               testerProfile: {
                 select: {
+                  userId: true,
                   fullName: true,
 
                   user: {
@@ -428,6 +430,14 @@ export async function PATCH(
           rejectionReason,
         });
 
+      await sendTaskStatusPush({
+        userId: task.testerCampaign.testerProfile.userId,
+        taskNumber: task.taskNumber,
+        productName: task.testerCampaign.campaign.productName,
+        type: "REJECTED",
+        rejectionReason,
+      });
+
       return NextResponse.json(
         {
           success: true,
@@ -618,6 +628,13 @@ export async function PATCH(
           taskNumber:
             4,
         });
+
+      await sendTaskStatusPush({
+        userId: task.testerCampaign.testerProfile.userId,
+        taskNumber: 4,
+        productName: task.testerCampaign.campaign.productName,
+        type: "COMPLETED",
+      });
 
       return NextResponse.json(
         {
@@ -851,6 +868,14 @@ export async function PATCH(
               "Task 4 is now available.",
           });
 
+        await sendTaskStatusPush({
+          userId: task.testerCampaign.testerProfile.userId,
+          taskNumber: 3,
+          productName: task.testerCampaign.campaign.productName,
+          type: "APPROVED",
+          nextTaskNumber: 4,
+        });
+
         return NextResponse.json(
           {
             success: true,
@@ -1011,6 +1036,13 @@ export async function PATCH(
           taskNumber:
             3,
         });
+
+      await sendTaskStatusPush({
+        userId: task.testerCampaign.testerProfile.userId,
+        taskNumber: 3,
+        productName: task.testerCampaign.campaign.productName,
+        type: "COMPLETED",
+      });
 
       return NextResponse.json(
         {
@@ -1207,6 +1239,14 @@ export async function PATCH(
           `Task ${nextTaskNumber} is now available.`,
       });
 
+    await sendTaskStatusPush({
+      userId: task.testerCampaign.testerProfile.userId,
+      taskNumber: task.taskNumber,
+      productName: task.testerCampaign.campaign.productName,
+      type: "APPROVED",
+      nextTaskNumber,
+    });
+
     return NextResponse.json(
       {
         success: true,
@@ -1387,6 +1427,55 @@ async function sendTaskStatusWhatsApp({
           ? error.message
           : "Unable to send WhatsApp notification.",
     };
+  }
+}
+
+async function sendTaskStatusPush({
+  userId,
+  taskNumber,
+  productName,
+  type,
+  rejectionReason,
+  nextTaskNumber,
+}: {
+  userId: number;
+  taskNumber: number;
+  productName: string;
+  type: TaskWhatsappType;
+  rejectionReason?: string;
+  nextTaskNumber?: number;
+}) {
+  try {
+    let title = "";
+    let body = "";
+
+    if (type === "REJECTED") {
+      title = `⚠️ Task ${taskNumber} Needs Revision`;
+      body = rejectionReason
+        ? `Your submission for Task ${taskNumber} in "${productName}" was rejected: ${rejectionReason}`
+        : `Your submission for Task ${taskNumber} in "${productName}" requires revision. Please check and resubmit.`;
+    } else if (type === "COMPLETED") {
+      title = `🎉 Campaign Completed!`;
+      body = `Congratulations! Task ${taskNumber} approved and you have successfully completed the campaign "${productName}". Your earnings have been credited to your wallet!`;
+    } else {
+      title = `✅ Task ${taskNumber} Approved!`;
+      body = nextTaskNumber
+        ? `Your submission for Task ${taskNumber} in "${productName}" is approved. Task ${nextTaskNumber} is now unlocked!`
+        : `Your submission for Task ${taskNumber} in "${productName}" has been approved.`;
+    }
+
+    await sendPushNotification({
+      userId,
+      title,
+      body,
+      data: {
+        type: `TASK_${type}`,
+        taskNumber: String(taskNumber),
+        productName,
+      },
+    });
+  } catch (fcmError) {
+    console.error("FCM Task Status Error:", fcmError);
   }
 }
 

@@ -56,6 +56,7 @@ model User {
   paidPaymentRequests           PaymentRequest[]       @relation("PaymentRequestPayer")
   passwordResetOtps             PasswordResetOtp[]
   sentCampaignInvitations CampaignInvitation[] @relation("CampaignInvitationInvitedBy")
+  deviceTokens            UserDeviceToken[]
 
   @@index([role])
   @@index([status])
@@ -961,6 +962,21 @@ model ContactInquiry {
 
   @@map("contact_inquiries")
 }
+
+model UserDeviceToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int?     @map("user_id")
+  token     String   @unique @db.VarChar(500)
+  platform  String   @default("android") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("user_device_tokens")
+}
+
 
 
 

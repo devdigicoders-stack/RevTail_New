@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
+    "dev": "next dev --webpack -p 3005",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "seed": "jiti src/scripts/seed-users.ts",
+    "create-admin": "jiti src/scripts/create-admin.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -26,6 +27,7 @@
     "chart.js": "^4.5.1",
     "cookie": "^2.0.1",
     "dotenv": "^17.4.2",
+    "firebase-admin": "^14.5.1",
     "jose": "^6.2.12",
     "mariadb": "^3.5.4",
     "mysql2": "^3.24.3",

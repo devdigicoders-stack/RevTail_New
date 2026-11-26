@@ -184,10 +184,10 @@ export async function POST(request: NextRequest) {
     }
 
     // ------------------------------------------------
-    // 8. Lookup PIN code from our own PinCodeMaster
+    // 8. Lookup PIN code from PinCodeMaster or India Post API
     // ------------------------------------------------
 
-    const pinLocation = await prisma.pinCodeMaster.findFirst({
+    let pinLocation = await prisma.pinCodeMaster.findFirst({
       where: {
         pinCode: normalizedPinCode,
         isActive: true,
@@ -198,6 +198,51 @@ export async function POST(request: NextRequest) {
         state: true,
       },
     });
+
+    if (!pinLocation) {
+      try {
+        const postalRes = await fetch(
+          `https://api.postalpincode.in/pincode/${normalizedPinCode}`,
+          { signal: AbortSignal.timeout(4000) }
+        );
+        const postalData = await postalRes.json();
+
+        if (
+          Array.isArray(postalData) &&
+          postalData[0]?.Status === "Success" &&
+          Array.isArray(postalData[0]?.PostOffice) &&
+          postalData[0].PostOffice.length > 0
+        ) {
+          const po = postalData[0].PostOffice[0];
+          const fetchedCity = (po.District || po.Name || "").trim();
+          const fetchedState = (po.State || "").trim();
+
+          if (fetchedCity && fetchedState) {
+            // Save to PinCodeMaster for future lookups
+            try {
+              await prisma.pinCodeMaster.create({
+                data: {
+                  pinCode: normalizedPinCode,
+                  city: fetchedCity,
+                  state: fetchedState,
+                  isActive: true,
+                },
+              });
+            } catch (dbError) {
+              // Ignore unique/concurrency error on insert
+            }
+
+            pinLocation = {
+              pinCode: normalizedPinCode,
+              city: fetchedCity,
+              state: fetchedState,
+            };
+          }
+        }
+      } catch (fetchError) {
+        console.warn("India Post API lookup failed:", fetchError);
+      }
+    }
 
     if (!pinLocation) {
       return NextResponse.json(

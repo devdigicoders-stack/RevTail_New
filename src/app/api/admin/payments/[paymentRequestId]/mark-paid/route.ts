@@ -16,6 +16,7 @@ import {
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/current-user";
 import { sendWhatsAppTemplate } from "@/lib/whatsapp";
+import { sendPushNotification } from "@/lib/notification";
 
 export async function PATCH(
   request: NextRequest,
@@ -184,6 +185,7 @@ export async function PATCH(
 
           testerProfile: {
             select: {
+              userId: true,
               fullName: true,
 
               user: {
@@ -461,6 +463,22 @@ export async function PATCH(
             ? whatsappSendError.message
             : "Unable to send WhatsApp notification.";
       }
+    }
+
+    // Send Push Notification
+    try {
+      await sendPushNotification({
+        userId: paymentRequest.testerProfile.userId,
+        title: "💰 Payout Sent!",
+        body: `Your withdrawal of ₹${paidAmount} has been processed and transferred via ${paidMethodRaw}. Ref: ${transactionReference || "N/A"}`,
+        data: {
+          type: "PAYMENT_PAID",
+          paymentRequestId: String(paymentRequest.id),
+          amount: String(paidAmount),
+        },
+      });
+    } catch (fcmError) {
+      console.error("FCM Payment Paid Error:", fcmError);
     }
 
     // ============================================================

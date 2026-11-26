@@ -45,6 +45,7 @@ next-env.d.ts
 *.apk
 *.aab
 *.jks
+*.zip
 key.properties
 revtail_tester_app/android/key.properties
 revtail_tester_app/android/app/key.jks

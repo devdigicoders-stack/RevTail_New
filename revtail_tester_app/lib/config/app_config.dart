@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 
 class AppConfig {
   static const String appName = 'Revtail';
-  // Live Production URLs (Commented out for local testing)
-  // static const String initialUrl = 'https://revtail.in/tester';
-  // static const String fallbackUrl = 'https://revtail.in/login';
-  // static const String domain = 'revtail.in';
 
-  // Local Development URLs (Port 3005)
-  // For Physical Phone connected on same Wi-Fi
-  static const String initialUrl = 'http://192.168.29.234:3005/tester';
-  static const String fallbackUrl = 'http://192.168.29.234:3005/login';
-  static const String domain = '192.168.29.234';
+  // Live Production URLs
+  static const String initialUrl = 'https://revtail.in/tester';
+  static const String fallbackUrl = 'https://revtail.in/login';
+  static const String domain = 'revtail.in';
 
   // Revtail Brand Colors
   static const Color primaryColor = Color(0xFF002E7E); // Navy Blue
@@ -28,4 +23,3 @@ class AppConfig {
       'Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 '
       '(KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36 RevtailTesterApp/1.0.0';
 }
-

@@ -922,18 +922,15 @@ export default function AdminBrandsPage() {
                             <td>
 
                               <div>
-
-                                {brand.user.email ??
+                                {brand.user?.email ??
                                   "-"}
-
                               </div>
 
-                              <small className="text-muted">
-
+                              <small className="text-muted d-block mt-1">
+                                <i className="bi bi-telephone me-1 text-primary"></i>
                                 {brand.pocMobile ??
-                                  brand.user.mobile ??
+                                  brand.user?.mobile ??
                                   "-"}
-
                               </small>
 
                             </td>

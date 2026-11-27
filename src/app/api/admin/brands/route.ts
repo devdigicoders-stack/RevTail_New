@@ -244,6 +244,15 @@ export async function GET(
 
               {
                 user: {
+                  mobile: {
+                    contains:
+                      search,
+                  },
+                },
+              },
+
+              {
+                user: {
                   email: {
                     contains:
                       search,
@@ -512,20 +521,14 @@ export async function GET(
             brand.rejectionReason,
 
           user: {
-              select: {
-                email: true,
+            email: brand.user?.email ?? null,
+            mobile: brand.user?.mobile ?? null,
+            status: brand.user?.status ?? null,
+          },
 
-                mobile: true,
-
-                status: true,
-              },
-            },
-
-        _count: {
-              select: {
-                campaigns: true,
-              },
-            },
+          _count: {
+            campaigns: brand._count?.campaigns ?? 0,
+          },
         })
       );
 

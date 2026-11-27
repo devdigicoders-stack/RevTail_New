@@ -13,6 +13,7 @@ export async function POST(request: Request) {
 
     const {
       email,
+      mobile,
       password,
       companyName,
       companyType,
@@ -55,10 +56,17 @@ export async function POST(request: Request) {
         ? pocFullName.trim()
         : "";
 
-    const normalizedPocMobile =
-      typeof pocMobile === "string"
-        ? pocMobile.trim()
+    const rawMobile = mobile || pocMobile;
+    const normalizedMobile =
+      typeof rawMobile === "string"
+        ? rawMobile.trim().replace(/\D/g, "")
         : "";
+
+    const normalizedPocMobile =
+      normalizedMobile ||
+      (typeof pocMobile === "string"
+        ? pocMobile.trim().replace(/\D/g, "")
+        : "");
 
     const normalizedDesignation =
       typeof designation === "string"
@@ -84,6 +92,16 @@ export async function POST(request: Request) {
         {
           success: false,
           message: "Password is required.",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!normalizedMobile) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Mobile number is required.",
         },
         { status: 400 }
       );
@@ -163,15 +181,10 @@ export async function POST(request: Request) {
     }
 
     // =========================================================
-    // 6. OPTIONAL POC MOBILE VALIDATION
+    // 6. MANDATORY MOBILE NUMBER VALIDATION
     // =========================================================
 
-    if (
-      normalizedPocMobile &&
-      !/^[6-9]\d{9}$/.test(
-        normalizedPocMobile
-      )
-    ) {
+    if (!/^[6-9]\d{9}$/.test(normalizedMobile)) {
       return NextResponse.json(
         {
           success: false,
@@ -210,26 +223,64 @@ export async function POST(request: Request) {
     }
 
     // =========================================================
-    // 8. CHECK EXISTING EMAIL
+    // 8. CHECK EXISTING EMAIL & MOBILE
     // =========================================================
 
     const existingUser =
-      await prisma.user.findUnique({
+      await prisma.user.findFirst({
         where: {
-          email: normalizedEmail,
+          OR: [
+            { email: normalizedEmail },
+            { mobile: normalizedMobile },
+          ],
         },
+        select: {
+          id: true,
+          email: true,
+          mobile: true,
+        },
+      });
 
+    if (existingUser) {
+      if (existingUser.email === normalizedEmail) {
+        return NextResponse.json(
+          {
+            success: false,
+            message:
+              "A user with this email address already exists.",
+          },
+          { status: 409 }
+        );
+      }
+
+      if (existingUser.mobile === normalizedMobile) {
+        return NextResponse.json(
+          {
+            success: false,
+            message:
+              "A user with this mobile number already exists.",
+          },
+          { status: 409 }
+        );
+      }
+    }
+
+    const existingBrandProfile =
+      await prisma.brandProfile.findFirst({
+        where: {
+          pocMobile: normalizedMobile,
+        },
         select: {
           id: true,
         },
       });
 
-    if (existingUser) {
+    if (existingBrandProfile) {
       return NextResponse.json(
         {
           success: false,
           message:
-            "A user with this email address already exists.",
+            "A brand with this mobile number already exists.",
         },
         { status: 409 }
       );
@@ -295,6 +346,9 @@ export async function POST(request: Request) {
               data: {
                 email:
                   normalizedEmail,
+
+                mobile:
+                  normalizedMobile,
 
                 password:
                   hashedPassword,
@@ -373,6 +427,9 @@ export async function POST(request: Request) {
 
           email:
             brand.user.email,
+
+          mobile:
+            brand.user.mobile,
 
           companyName:
             brand.brandProfile

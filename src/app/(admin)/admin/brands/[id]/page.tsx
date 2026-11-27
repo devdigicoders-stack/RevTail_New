@@ -464,6 +464,15 @@ export default function AdminBrandDetailsPage() {
               label="POC Mobile"
               value={
                 brand.pocMobile ??
+                brand.user?.mobile ??
+                "-"
+              }
+            />
+
+            <Detail
+              label="Login Mobile"
+              value={
+                brand.user?.mobile ??
                 "-"
               }
             />
@@ -471,7 +480,7 @@ export default function AdminBrandDetailsPage() {
             <Detail
               label="Login Email"
               value={
-                brand.user.email ??
+                brand.user?.email ??
                 "-"
               }
             />

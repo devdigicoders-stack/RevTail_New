@@ -43,6 +43,9 @@ export default function BrandSignupForm() {
   const [email, setEmail] =
     useState("");
 
+  const [mobile, setMobile] =
+    useState("");
+
   const [password, setPassword] =
     useState("");
 
@@ -196,6 +199,28 @@ export default function BrandSignupForm() {
     }
 
     // ----------------------------------------------------------
+    // Mobile Number (Mandatory)
+    // ----------------------------------------------------------
+
+    if (!mobile.trim()) {
+      setErrorMessage(
+        "Mobile number is required."
+      );
+
+      return false;
+    }
+
+    const cleanMobile = mobile.trim().replace(/\D/g, "");
+
+    if (!/^[6-9]\d{9}$/.test(cleanMobile)) {
+      setErrorMessage(
+        "Please enter a valid 10-digit Indian mobile number."
+      );
+
+      return false;
+    }
+
+    // ----------------------------------------------------------
     // Password
     // ----------------------------------------------------------
 
@@ -284,6 +309,12 @@ export default function BrandSignupForm() {
                   .trim()
                   .toLowerCase(),
 
+              mobile:
+                mobile.trim().replace(/\D/g, ""),
+
+              pocMobile:
+                mobile.trim().replace(/\D/g, ""),
+
               password,
             }),
           }
@@ -345,6 +376,7 @@ export default function BrandSignupForm() {
           "Your account is under review." +
             "You will be notified once approved." 
         );
+        setMobile("");
         setPassword("");
         setConfirmPassword("");
     } catch (error) {
@@ -487,13 +519,13 @@ export default function BrandSignupForm() {
         {/* ==================================================== */}
         {/* EMAIL */}
         {/* ==================================================== */}
-        <div className="col-12">
+        <div className="col-12 col-md-6">
           <div className="login-form-group mb-0">
             <label
               htmlFor="email"
               className="login-form-label"
             >
-              Official Email Address
+              Official Email Address <span className="text-danger">*</span>
             </label>
 
             <div className="login-input-group">
@@ -518,7 +550,46 @@ export default function BrandSignupForm() {
             </div>
 
             <small className="form-helper-text">
-              This email will be used for your Brand portal login and campaign updates.
+              For Brand portal login & campaign updates.
+            </small>
+          </div>
+        </div>
+
+        {/* ==================================================== */}
+        {/* MOBILE NUMBER */}
+        {/* ==================================================== */}
+        <div className="col-12 col-md-6">
+          <div className="login-form-group mb-0">
+            <label
+              htmlFor="mobile"
+              className="login-form-label"
+            >
+              Mobile Number <span className="text-danger">*</span>
+            </label>
+
+            <div className="login-input-group">
+              <i className="bi bi-telephone input-icon"></i>
+
+              <input
+                type="tel"
+                id="mobile"
+                name="mobile"
+                className="login-input"
+                placeholder="10-digit mobile number"
+                value={mobile}
+                onChange={(event) => {
+                  const cleaned = event.target.value.replace(/\D/g, "").slice(0, 10);
+                  setMobile(cleaned);
+                }}
+                disabled={isLoading}
+                autoComplete="tel"
+                maxLength={10}
+                required
+              />
+            </div>
+
+            <small className="form-helper-text">
+              For account verification & important notifications.
             </small>
           </div>
         </div>
